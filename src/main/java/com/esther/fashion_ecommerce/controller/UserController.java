@@ -2,6 +2,7 @@ package com.esther.fashion_ecommerce.controller;
 
 import ch.qos.logback.core.model.Model;
 import com.esther.fashion_ecommerce.model.User;
+import com.esther.fashion_ecommerce.payload.LoginDto;
 import com.esther.fashion_ecommerce.payload.UserDto;
 import com.esther.fashion_ecommerce.service.UserService;
 import jakarta.validation.Valid;
@@ -18,10 +19,23 @@ public class UserController {
 
     private final UserService userService;
 
+    //-----------------------------------------------------------
+    // Sign up a user using the createAUser method of this PostMapping.
+    //-----------------------------------------------------------
     @PostMapping(path = "/createUser")
     public ResponseEntity<?> createAUser(@RequestBody @Valid UserDto userDto){
         User aUser = userService.createUser(userDto);
         return new ResponseEntity<>(aUser, HttpStatus.CREATED);
+    }
+
+    @GetMapping(path = "/login")
+    public ResponseEntity<?> loginUser(@RequestBody LoginDto loginDto){
+        String user = userService.login(loginDto);
+        if (user.equals("success")){
+            return new ResponseEntity<>(user, HttpStatus.FOUND);
+        }
+        return new ResponseEntity<>(user, HttpStatus.OK);
+
     }
 
     @GetMapping(path = "/getUsers")

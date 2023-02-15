@@ -2,10 +2,12 @@ package com.esther.fashion_ecommerce.service;
 
 import com.esther.fashion_ecommerce.exception.UserNotFoundException;
 import com.esther.fashion_ecommerce.model.User;
+import com.esther.fashion_ecommerce.payload.LoginDto;
 import com.esther.fashion_ecommerce.payload.UserDto;
 import com.esther.fashion_ecommerce.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PutMapping;
 
 import java.util.List;
 import java.util.Optional;
@@ -40,6 +42,25 @@ public class UserService {
 
      }
 
+     public String login(LoginDto loginDto){
+        Optional<User> checkEmail = userRepository.findByEmail(loginDto.getEmail());
+
+        if (checkEmail.isPresent()){
+
+            User user = checkEmail.get();
+            if (user.getPassword().equals(loginDto.getPassword())){
+                return "SuccessFull";
+            } else {
+                throw new UserNotFoundException("Incorrect email or password");
+            }
+
+        } else {
+            throw new UserNotFoundException("User does not exist");
+        }
+     }
+
+
+
     public List<User> getAllUser(){
         return userRepository.findAll();
     }
@@ -48,7 +69,7 @@ public class UserService {
         Optional<User> findUser = userRepository.findById(id);
         if (findUser.isEmpty()){
 
-            throw new UserNotFoundException("The user with the id: {" + id + "}not found");
+            throw new UserNotFoundException("The user with this  id: {" + id + "} not found");
         }
         return findUser.get();
     }

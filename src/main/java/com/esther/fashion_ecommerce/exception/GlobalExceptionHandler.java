@@ -11,7 +11,7 @@ import java.time.ZonedDateTime;
 @ControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler
-    public ResponseEntity<CustomErrorResponse> fileNotFound(UserNotFoundException userId, HttpServletRequest req){
+    public ResponseEntity<CustomErrorResponse> UserNotFound(UserNotFoundException userId, HttpServletRequest req){
        CustomErrorResponse errorMessage = new CustomErrorResponse(
                ZonedDateTime.now(),
                HttpStatus.NOT_FOUND.value(),
